@@ -66,7 +66,7 @@ DB와 관련된 역할을 하는 모듈 입니다. DB는 현재 `Mongo DB`를 �
 
 ### service
 
-[📒 Service Docs](./src/service/README.md)
+[📒 Service Docs](./src/service/README.md)   
 `비즈니스(핵심) 로직`이 모여져 있는 모듈입니다. 해당 모듈은 Express의 기능(req, res, next)에 의존적이지 않게 설계되어 있습니다.  
 또한 외부로 공개될 함수 / 변수만 `export` 하도록 합니다.
 
