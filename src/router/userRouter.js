@@ -12,7 +12,7 @@ router.post('/sign-up', async (req, res, next) => {
         res.status(200).json({
             sucess: true,
             message: 'Sign Up Success',
-            status: 201,
+            status: 200,
             result: result,
         });
     } catch (err) {
