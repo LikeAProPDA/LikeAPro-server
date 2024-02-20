@@ -13,7 +13,7 @@
 
 이름: Like A Pro (Server)  
 플랫폼: Node.js & Express  
-DB: Mongo DB
+DB: Mongo DB   
 팀원: 유영서 / 이선영 / 김동원 / 정채헌
 
 ## 2. 프로젝트 구조
