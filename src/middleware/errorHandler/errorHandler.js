@@ -1,6 +1,8 @@
-const errorHandler = (err, req, res) => {
+import { ApplicationError } from '../../util/error/applicationError.js';
+
+const errorHandler = (err, req, res, next) => {
     if (err instanceof ApplicationError) {
-        return res.status(err.status).json({
+        res.status(err.status).json({
             success: false,
             message: err.message,
         });
