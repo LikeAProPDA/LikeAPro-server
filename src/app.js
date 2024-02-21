@@ -5,6 +5,7 @@ import errorHandler from './middleware/errorHandler/errorHandler.js';
 import userRouter from './router/userRouter.js';
 import qasRouter from './router/qasRouter.js';
 import dbSetUp from './db/dbSetUp.js';
+import cookieParser from 'cookie-parser';
 
 // 환경 변수 사용
 dotenv.config();
@@ -12,6 +13,8 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 // CORS 설정, 클라이언트 HOST와 맞추어야 함
 app.use(
