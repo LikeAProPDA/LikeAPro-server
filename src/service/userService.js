@@ -4,34 +4,35 @@ import UserModel from '../db/models/userModel.js';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import { generateJwt } from '../util/jwt/jwtUtil.js';
+
 dotenv.config();
 
 const signUp = async (email, nickname, password, backjoonId) => {
-    // validate
-    await validateEmail(email);
-    await validateNickname(nickname);
-    await validatePassword(password);
-    await validateBackjoonId(backjoonId);
+  // validate
+  await validateEmail(email);
+  await validateNickname(nickname);
+  await validatePassword(password);
+  await validateBackjoonId(backjoonId);
 
-    // salt
-    const hashedPassword = await toHashedPassword(password);
+  // salt
+  const hashedPassword = await toHashedPassword(password);
 
-    // save
-    const user = new UserModel({
-        email: email,
-        nickname: nickname,
-        password: hashedPassword,
-        backjoonId: backjoonId,
-    });
+  // save
+  const user = new UserModel({
+    email: email,
+    nickname: nickname,
+    password: hashedPassword,
+    backjoonId: backjoonId,
+  });
 
-    const result = await user.save();
-    return {
-        id: result._id,
-        nickname: result.nickname,
-        backjoonId: result.backjoonId,
-        profile: result.profile,
-        createdAt: result.createdAt,
-    };
+  const result = await user.save();
+  return {
+      id: result._id,
+      nickname: result.nickname,
+      backjoonId: result.backjoonId,
+      profile: result.profile,
+      createdAt: result.createdAt,
+  };
 };
 
 const login = async (email, password) => {
@@ -80,38 +81,48 @@ const validateEmail = async (email) => {
 };
 
 const validateNickname = async (nickname) => {
-    if (!nickname || !validator.isLength(nickname.toString(), { min: 2, max: 12 })) {
-        throw new ApplicationError(400, '닉네임 길이는 2~12 글자 사이로 설정해야합니다.');
-    }
+  if (
+    !nickname ||
+    !validator.isLength(nickname.toString(), { min: 2, max: 12 })
+  ) {
+    throw new ApplicationError(
+      400,
+      "닉네임 길이는 2~12 글자 사이로 설정해야합니다."
+    );
+  }
 
-    if (await isExistByNickname(nickname)) throw new ApplicationError(400, '해당 닉네임은 이미 사용 중 입니다.');
+  if (await isExistByNickname(nickname)) throw new ApplicationError(400, '해당 닉네임은 이미 사용 중 입니다.');
 };
 
 const validatePassword = (password) => {
-    if (!password || !validator.isLength(password.toString(), { min: 8, max: 50 }))
-        throw new ApplicationError(400, '비밀번호는 최소 8자 이상이어야 합니다.');
+  if (
+    !password ||
+    !validator.isLength(password.toString(), { min: 8, max: 50 })
+  )
+    throw new ApplicationError(400, "비밀번호는 최소 8자 이상이어야 합니다.");
 };
 
 const validateBackjoonId = async (backjoonId) => {
-    if (!backjoonId) throw new ApplicationError(400, '올바른 백준 아이디를 입력해주세요.');
+  if (!backjoonId)
+    throw new ApplicationError(400, "올바른 백준 아이디를 입력해주세요.");
 
-    if (await isExistByBackjoonId(backjoonId.toString()))
-        throw new ApplicationError(400, '해당 백준 아이디는 이미 사용 중입니다.');
+  if (await isExistByBackjoonId(backjoonId.toString()))
+      throw new ApplicationError(400, '해당 백준 아이디는 이미 사용 중입니다.');
 };
 
 const isExistByEmail = async (email) => {
-    const result = await UserModel.exists({ email: email });
-    return result;
+  const result = await UserModel.exists({ email: email });
+  return result;
 };
 
 const isExistByNickname = async (nickname) => {
-    const result = await UserModel.exists({ nickname: nickname });
-    return result;
+  const result = await UserModel.exists({ nickname: nickname });
+  return result;
 };
 
 const isExistByBackjoonId = async (backjoonId) => {
-    const result = await UserModel.exists({ backjoonId: backjoonId });
-    return result;
+  const result = await UserModel.exists({ backjoonId: backjoonId });
+  return result;
 };
 
 export { signUp, login };
