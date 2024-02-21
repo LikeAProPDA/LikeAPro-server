@@ -2,6 +2,7 @@ import express from "express";
 import * as QAservice from "../services/qaService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 
+
 const router = express.Router();
 
 router.get("/", async function (req, res, next) {
@@ -18,7 +19,6 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-//req.user.id
 
 router.get("/:qaid", async function (req, res, next) {
   try {
@@ -36,3 +36,4 @@ router.get("/:qaid", async function (req, res, next) {
 });
 
 export default router;
+

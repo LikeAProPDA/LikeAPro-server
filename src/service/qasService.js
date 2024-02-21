@@ -1,5 +1,7 @@
+
 import QAModel from "../db/models/qaModel.js";
 import { ApplicationError } from "../util/error/applicationError.js";
+
 
 export const getAllQAs = async () => {
   try {
@@ -9,6 +11,7 @@ export const getAllQAs = async () => {
     throw new ApplicationError(500, "Error retrieving QAs");
   }
 };
+
 
 export const getQAById = async (qaId) => {
   try {
@@ -26,3 +29,4 @@ export const getQAById = async (qaId) => {
     throw new ApplicationError(500, "Error retrieving QA");
   }
 };
+
