@@ -1,6 +1,7 @@
 import express from "express";
 import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
+import authHandler from "../middleware/authHandler/authHandler.js";
 
 const router = express.Router();
 //모든 QA조회
@@ -33,7 +34,7 @@ router.get("/:qaid", async function (req, res, next) {
   }
 });
 //추가
-router.post("/", async (req, res, next) => {
+router.post("/", authHandler, async (req, res, next) => {
   try {
     const { title, content, author, isCompleted } = req.body;
 
@@ -51,7 +52,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 //삭제
-router.delete("/:qaid", async function (req, res, next) {
+router.delete("/:qaid", authHandler, async function (req, res, next) {
   try {
     const qaId = req.params.qaid;
     await QAservice.deleteQA(qaId);
@@ -65,7 +66,7 @@ router.delete("/:qaid", async function (req, res, next) {
   }
 });
 //수정
-router.put("/:qaid", async function (req, res, next) {
+router.put("/:qaid", authHandler, async function (req, res, next) {
   try {
     const qaId = req.params.qaid;
     const { title, content, isCompleted } = req.body;
