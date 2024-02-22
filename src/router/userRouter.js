@@ -4,10 +4,10 @@ import authHandler from '../middleware/authHandler/authHandler.js';
 import { ApplicationError } from '../util/error/applicationError.js';
 const router = express.Router();
 
-router.post("/sign-up", async (req, res, next) => {
-  try {
-    const { email, nickname, password, backjoonId } = req.body;
-    const result = await signUp(email, nickname, password, backjoonId);
+router.post('/sign-up', async (req, res, next) => {
+    try {
+        const { email, nickname, password, backjoonId } = req.body;
+        const result = await signUp(email, nickname, password, backjoonId);
 
         return res.status(201).json({
             sucess: true,
@@ -54,7 +54,7 @@ router.get('/login', authHandler, async (req, res, next) => {
         success: true,
         message: 'login user',
         result: {
-            ...req.user,
+            user: req.user,
             isLogin: true,
         },
     });
