@@ -11,10 +11,10 @@ const qaSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    userId: {
+    author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: "user",
+      // required: true,
     },
     createdAt: Date,
     updatedAt: Date,
@@ -25,5 +25,5 @@ const qaSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const QAModel = mongoose.model("qa", qaSchema);
-export default QAModel;
+const QA = mongoose.models.qas || mongoose.model("qas", qaSchema);
+export default QA;
