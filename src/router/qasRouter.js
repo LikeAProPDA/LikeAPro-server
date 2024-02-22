@@ -1,5 +1,5 @@
 import express from "express";
-import * as QAservice from "../services/qaService.js";
+import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 
 
