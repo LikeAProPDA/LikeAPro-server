@@ -36,8 +36,6 @@ const getCommentsForQA = async (qaId) => {
       })
     );
 
-    console.log(populatedComments);
-
     return populatedComments;
   } catch (error) {
     throw new ApplicationError(500, "댓글을 가져올 수 없습니다.", error);
