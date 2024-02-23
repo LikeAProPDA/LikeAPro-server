@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import errorHandler from "./middleware/errorHandler/errorHandler.js";
 import userRouter from "./router/userRouter.js";
+import qaCommentRouter from "./router/qaCommentRouter.js";
 import dbSetUp from "./db/dbSetUp.js";
+import cookieParser from "cookie-parser";
 
 // 환경 변수 사용
 dotenv.config();
@@ -24,6 +26,7 @@ app.use(
 
 // Router
 app.use("/api/users", userRouter);
+app.use("/api/qas", qaCommentRouter);
 
 // 에러 핸들링 미들웨어 -> 앱 전체적으로 검사하므로 맨 마지막에 배치해야함
 app.use(errorHandler);
