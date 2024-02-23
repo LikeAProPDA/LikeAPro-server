@@ -1,49 +1,101 @@
 import QACommentModel from "../db/models/QACommentModel.js";
+import QA from "../db/models/qaModel.js";
+import UserModel from "../db/models/userModel.js";
+
 import { ApplicationError } from "../util/error/applicationError.js";
 
 //댓글 가져오기
-const getComment = async (qaId) => {
+//예시: {{base_url}}/qas/65d6fa1db44d8c85d3ad5cf9/comments
+const getCommentsForQA = async (qaId) => {
   try {
-    const qaComment = await QACommentModel.find({
-      qaId: qaId,
+    const comments = await QACommentModel.find({
+      qa: qaId,
     });
-    return qaComment;
+
+    if (!comments) {
+      throw new ApplicationError(404, "모든 댓글을 찾을 수 없습니다.");
+    }
+
+    const populatedComments = await Promise.all(
+      comments.map(async (comment) => {
+        const populatedComment = await comment.populate("user");
+
+        const extractedComment = {
+          id: populatedComment._id,
+          content: populatedComment.content,
+          user: {
+            id: populatedComment.user._id,
+            nickname: populatedComment.user.nickname,
+          },
+          qa: populatedComment.qa,
+          createdAt: populatedComment.createdAt,
+          updatedAt: populatedComment.updatedAt,
+        };
+
+        return extractedComment;
+      })
+    );
+
+    console.log(populatedComments);
+
+    return populatedComments;
   } catch (error) {
     throw new ApplicationError(500, "댓글을 가져올 수 없습니다.", error);
   }
 };
 
 //댓글 업로드
-const uploadComment = async (qaId, comment) => {
+//예시: {{base_url}}/qas/65d6fa1db44d8c85d3ad5cf9/comments
+const uploadCommentForQA = async (qaId, content, user) => {
   try {
-    const qaComment = await QACommentModel.create({
-      qaId: qaId,
-      comment: comment,
+    // Create a new QAComment
+    const newQAComment = await QACommentModel.create({
+      content,
+      user: user.id,
+      qa: qaId,
     });
-    return qaComment;
+
+    const populatedQAComment = await QACommentModel.findById(
+      newQAComment._id
+    ).populate("user");
+
+    const extractedComment = {
+      id: populatedQAComment._id,
+      content: populatedQAComment.content,
+      user: {
+        id: populatedQAComment.user._id,
+        nickname: populatedQAComment.user.nickname,
+      },
+      qa: populatedQAComment.qa,
+      createdAt: populatedQAComment.createdAt,
+      updatedAt: populatedQAComment.updatedAt,
+    };
+
+    return extractedComment;
   } catch (error) {
     throw new ApplicationError(500, "댓글을 업로드할 수 없습니다.", error);
   }
 };
 
 //댓글 업데이트
-const updateComment = async (commentId, content) => {
+//{{base_url}}/qas/comments/65d7fa00adb3c95455c80f31
+const updateCommentForQA = async (commentId, content) => {
   try {
     const foundComment = await QACommentModel.findById(commentId);
+
     if (!foundComment) {
       throw new ApplicationError(404, "해당 댓글을 찾을 수 없습니다.");
     }
-
-    foundComment.content = content;
-    const updatedQaComment = await foundComment.save();
-    return updatedQaComment;
+    return foundComment._id;
   } catch (error) {
+    console.error(error);
     throw new ApplicationError(500, "댓글을 업데이트할 수 없습니다.", error);
   }
 };
 
 //댓글 삭제
-const deleteComment = async (commentId) => {
+//{{base_url}}/qas/comments/65d7fa00adb3c95455c80f31
+const deleteCommentForQA = async (commentId) => {
   try {
     const deletedComment = await QACommentModel.findByIdAndDelete(commentId);
 
@@ -51,10 +103,15 @@ const deleteComment = async (commentId) => {
       throw new ApplicationError(404, "해당 댓글을 찾을 수 없습니다.");
     }
 
-    return deletedComment;
+    return deletedComment._id;
   } catch (error) {
     throw new ApplicationError(500, "댓글을 삭제할 수 없습니다.", error);
   }
 };
 
-export { getComment, uploadComment, updateComment, deleteComment };
+export {
+  getCommentsForQA,
+  uploadCommentForQA,
+  updateCommentForQA,
+  deleteCommentForQA,
+};

@@ -1,17 +1,17 @@
 import mongoose, { Types } from "mongoose";
 
-const qaCommentSchema = mongoose.Schema(
+const qaCommentSchema = new mongoose.Schema(
   {
-    id: { type: Types.ObjectId, required: true },
+    id: Types.ObjectId,
     content: { type: String, required: true },
-    userId: {
+    user: {
       type: Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
-    qaId: {
+    qa: {
       type: Types.ObjectId,
-      ref: "QA",
+      ref: "qa",
       required: true,
     },
   },
