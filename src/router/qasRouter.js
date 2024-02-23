@@ -3,7 +3,6 @@ import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
 
-
 const router = express.Router();
 //모든 QA조회
 router.get("/", async function (req, res, next) {
