@@ -1,5 +1,5 @@
-import QACommentModel from "../db/models/QACommentModel";
-import { ApplicationError } from "../util/error/applicationError";
+import QACommentModel from "../db/models/QACommentModel.js";
+import { ApplicationError } from "../util/error/applicationError.js";
 
 //댓글 가져오기
 const getComment = async (qaId) => {
