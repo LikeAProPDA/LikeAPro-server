@@ -7,7 +7,7 @@ import {
 } from "../service/qaCommentService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // 댓글 조회 :  /api/qas/:qaId/comments
 router.get("/:qaId/comments", async (req, res, next) => {
