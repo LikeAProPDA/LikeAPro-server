@@ -1,12 +1,11 @@
 import express from "express";
-import QAComment from "../db/models/QACommentModel";
 import {
   getComment,
   uploadComment,
   updateComment,
   deleteComment,
-} from "../service/qaCommentService";
-import { ApplicationError } from "../util/error/applicationError";
+} from "../service/qaCommentService.js";
+import { ApplicationError } from "../util/error/applicationError.js";
 const router = express.Router();
 
 // 댓글 조회 :  /api/qas/:qaId/comments
@@ -75,3 +74,5 @@ router.delete("/comments/:commentId", loginRequired, async (req, res, next) => {
     next(new ApplicationError(404, "댓글을 삭제할 수 없습니다."));
   }
 });
+
+export default router;
