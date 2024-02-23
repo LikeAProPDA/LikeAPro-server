@@ -1,10 +1,21 @@
 import QA from "../db/models/qaModel.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 
+const mapToVisibleQA = (qa) => {
+  return {
+    id: qa._id,
+    title: qa.title,
+    author: {
+      id: qa.author.id,
+      nickname: qa.author.nickname,
+    },
+  };
+};
+
 export const getAllQAs = async () => {
   try {
-    const qas = await QA.find().populate("author", "nickname");
-    return qas;
+    const qas = await QA.find().populate({ path: "author", model: "user" });
+    return qas.map(mapToVisibleQA);
   } catch (error) {
     throw new ApplicationError(500, "Error retrieving QAs");
   }
@@ -28,14 +39,13 @@ export const getQAById = async (qaId) => {
   }
 };
 
-export const postQA = async (title, content, author, isCompleted) => {
+export const postQA = async (title, content, authorId) => {
   try {
     // 새로운 QA 생성 및 저장
     const savedQA = await QA.create({
       title: title,
       content: content,
-      author: author,
-      isCompleted: isCompleted,
+      author: authorId,
     });
 
     return savedQA;
@@ -77,4 +87,3 @@ export const editQA = async (qaId, newData) => {
     throw new ApplicationError(500, "Error updating QA");
   }
 };
-
