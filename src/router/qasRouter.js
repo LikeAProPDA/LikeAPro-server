@@ -3,7 +3,6 @@ import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
 
-
 const router = express.Router();
 //모든 QA조회
 router.get("/", async function (req, res, next) {
@@ -38,10 +37,10 @@ router.get("/:qaid", async function (req, res, next) {
 
 router.post("/", authHandler, async (req, res, next) => {
   try {
-    const { title, content, author, isCompleted } = req.body;
+    const { title, content } = req.body;
 
     // 새로운 QA 생성
-    const newQA = await QAservice.postQA(title, content, author, isCompleted);
+    const newQA = await QAservice.postQA(title, content, req.user.id);
 
     res.status(201).json({
       success: true,
