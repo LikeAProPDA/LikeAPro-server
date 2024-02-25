@@ -1,8 +1,8 @@
 import { ApplicationError } from '../../util/error/applicationError.js';
-import { parseToken } from '../../util/jwt/jwtUtil.js';
+import { parseAuthToken } from '../../util/jwt/jwtUtil.js';
 
 const authHandler = (req, res, next) => {
-    const user = parseToken(req.cookies.authToken);
+    const user = parseAuthToken(req.cookies.authToken);
     if (user) {
         req.user = user;
         return next();
