@@ -1,12 +1,12 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import errorHandler from './middleware/errorHandler/errorHandler.js';
-import userRouter from './router/userRouter.js';
-import dbSetUp from './db/dbSetUp.js';
-import cookieParser from 'cookie-parser';
-import qasRouter from './router/qasRouter.js';
-import path from 'path';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import errorHandler from "./middleware/errorHandler/errorHandler.js";
+import userRouter from "./router/userRouter.js";
+import dbSetUp from "./db/dbSetUp.js";
+import cookieParser from "cookie-parser";
+import qasRouter from "./router/qasRouter.js";
+import bojRouter from "./router/bojRouter.js";
 
 // 환경 변수 사용
 dotenv.config();
@@ -19,15 +19,17 @@ app.use(cookieParser());
 
 // CORS 설정, 클라이언트 HOST와 맞추어야 함
 app.use(
-    cors({
-        origin: ['http://localhost:5173'],
-        credentials: true,
-    })
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
 );
 
 // Router
-app.use('/api/users', userRouter);
-app.use('/api/qas', qasRouter);
+app.use("/api/users", userRouter);
+app.use("/api/qas", qasRouter);
+app.use("/api/bojs", bojRouter);
+
 // 에러 핸들링 미들웨어 -> 앱 전체적으로 검사하므로 맨 마지막에 배치해야함
 app.use(errorHandler);
 
@@ -40,6 +42,6 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_COLLECTION = process.env.DB_COLLECTION;
 
 app.listen(SERVER_PORT, () => {
-    console.log(`Server Listening on Port ${SERVER_PORT}`);
-    dbSetUp(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_COLLECTION);
+  console.log(`Server Listening on Port ${SERVER_PORT}`);
+  dbSetUp(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_COLLECTION);
 });
