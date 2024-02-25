@@ -6,7 +6,7 @@ import userRouter from "./router/userRouter.js";
 import dbSetUp from "./db/dbSetUp.js";
 import cookieParser from "cookie-parser";
 import qasRouter from "./router/qasRouter.js";
-import path from "path";
+import bojRouter from "./router/bojRouter.js";
 
 // 환경 변수 사용
 dotenv.config();
