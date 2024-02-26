@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import qasRouter from "./router/qasRouter.js";
 import scheduleRouter from "./router/scheduleRouter.js";
 import bojRouter from "./router/bojRouter.js";
+import scoreRouter from "./router/scoreRouter.js";
 
 // 환경 변수 사용
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/users", userRouter);
 app.use("/api/qas", qasRouter);
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/bojs", bojRouter);
+app.use("/api/score", scoreRouter);
 
 // 에러 핸들링 미들웨어 -> 앱 전체적으로 검사하므로 맨 마지막에 배치해야함
 app.use(errorHandler);
