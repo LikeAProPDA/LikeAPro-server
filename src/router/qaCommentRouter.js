@@ -7,6 +7,7 @@ import {
 } from "../service/qaCommentService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
+import ScheduleModel from "../db/models/scheduleModel.js";
 const router = express.Router({ mergeParams: true });
 
 // 댓글 조회 :  /api/qas/:qaId/comments
