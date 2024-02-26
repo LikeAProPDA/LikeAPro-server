@@ -1,7 +1,13 @@
 import express from 'express';
-import { login, signUp } from '../service/userService.js';
+import {
+    isExistByBackjoonId,
+    isExistByNickname,
+    isVerifyEmail,
+    login,
+    sendVerificationMail,
+    signUp,
+} from '../service/userService.js';
 import authHandler from '../middleware/authHandler/authHandler.js';
-import { ApplicationError } from '../util/error/applicationError.js';
 const router = express.Router();
 
 router.post('/sign-up', async (req, res, next) => {
@@ -58,6 +64,84 @@ router.get('/login', authHandler, async (req, res, next) => {
             isLogin: true,
         },
     });
+});
+
+router.get('/duplicate-nickname', async (req, res, next) => {
+    const { nickname } = req.query;
+    const isDuplicate = (await isExistByNickname(nickname)) ? true : false;
+    res.status(200).json({
+        success: true,
+        message: 'Duplicate Nickname API Invoked',
+        result: {
+            nickname: nickname,
+            isDuplicate: isDuplicate,
+        },
+    });
+});
+
+// 이메일 인증 보내기
+router.post('/verify-email', async (req, res, next) => {
+    try {
+        const { email } = req.query;
+        const result = await sendVerificationMail(email);
+
+        res.cookie('emailToken', result.emailToken, {
+            httpOnly: true,
+            maxAge: result.maxAge,
+            // secure: true // if https
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'send verification email',
+            result: {
+                targetEmail: email,
+                maxAge: result.maxAge,
+            },
+        });
+    } catch (err) {
+        console.error(err);
+        return next(err);
+    }
+});
+
+// 이메일 인증 확인
+router.get('/verify-email', async (req, res, next) => {
+    try {
+        const { email, code } = req.query;
+        const emailToken = req.cookies.emailToken;
+
+        const result = await isVerifyEmail(email, code, emailToken);
+        return res.status(200).send({
+            success: true,
+            message: 'Call Verify Email API',
+            result: {
+                targetEmail: email,
+                isVerify: result,
+            },
+        });
+    } catch (err) {
+        console.error(err);
+        return next(err);
+    }
+});
+
+router.get('/duplicate-backjoonid', async (req, res, next) => {
+    try {
+        const backjoonId = req.query.backjoonid;
+        const isDuplicate = (await isExistByBackjoonId(backjoonId)) ? true : false;
+        res.status(200).json({
+            success: true,
+            message: 'Duplicate Nickname API Invoked',
+            result: {
+                backjoonId: backjoonId,
+                isDuplicate: isDuplicate,
+            },
+        });
+    } catch (err) {
+        console.error(err);
+        return next(err);
+    }
 });
 
 export default router;
