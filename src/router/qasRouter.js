@@ -2,6 +2,7 @@ import express from "express";
 import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
+import qaCommentRouter from "../router/qaCommentRouter.js";
 
 const router = express.Router();
 
