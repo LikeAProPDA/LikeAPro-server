@@ -63,11 +63,31 @@ export const getRanking = async (start, limit) => {
       },
     ]);
 
+    const totalCount = await ScoreModel.aggregate([
+      {
+        $match: {
+          $expr: {
+            $and: [
+              { $eq: [{ $year: "$createdAt" }, currentYear] },
+              { $eq: [{ $month: "$createdAt" }, currentMonth] },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$userId",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
     const rankedData = sortData.map((entry, index) => ({
       userId: entry._id,
       totalScore: entry.totalScore,
       nickname: entry.userDetails.nickname,
       ranking: index + 1 + start,
+      totalCount: totalCount.length,
     }));
 
     return rankedData;
