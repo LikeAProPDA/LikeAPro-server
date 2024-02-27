@@ -19,6 +19,8 @@ export const checkAndUpdateIsSolved = async (problemNum, problemId, userId) => {
           { userId, "problems.problem": problemId },
           { $set: { "problems.$.isSolved": true } }
         );
+
+        await postScore(userId, 10);
       }
     }
     const result = { solved: user.solved, isSolved: isSolved };
