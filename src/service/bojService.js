@@ -3,6 +3,7 @@ import UserModel from "../db/models/userModel.js";
 import ProblemModel from "../db/models/problemModel.js";
 import RecommendModel from "../db/models/recommendModel.js";
 import { ApplicationError } from "../util/error/applicationError.js";
+import { postScore } from "./scoreService.js";
 
 export const checkAndUpdateIsSolved = async (problemNum, problemId, userId) => {
   try {
@@ -19,6 +20,8 @@ export const checkAndUpdateIsSolved = async (problemNum, problemId, userId) => {
           { userId, "problems.problem": problemId },
           { $set: { "problems.$.isSolved": true } }
         );
+
+        await postScore(userId, 10);
       }
     }
     const result = { solved: user.solved, isSolved: isSolved };
@@ -52,7 +55,10 @@ export const randomRecommend = async (count) => {
     const recommendedProblems = await ProblemModel.aggregate([
       { $sample: { size: count } },
     ]);
-    return recommendedProblems;
+
+    const result = recommendedProblems.map((problem) => ({ problem }));
+
+    return result;
   } catch (error) {
     if (error instanceof ApplicationError) {
       throw error;
