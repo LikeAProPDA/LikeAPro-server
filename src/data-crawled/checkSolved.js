@@ -17,12 +17,14 @@ export const checkSolved = async (problemNum, backjoonId) => {
       const dom = new JSDOM(htmlSnippet);
       const document = dom.window.document;
 
-      const resultElement = document.querySelector(".result-text");
-      let isSolved = false;
-      if (resultElement) {
-        isSolved = resultElement.textContent.includes("맞았습니다!!");
+      const resultElements = document.querySelectorAll(".result-text");
+
+      for (const resultElement of resultElements) {
+        if (resultElement.textContent.includes("맞았습니다!!")) {
+          return true;
+        }
       }
-      return isSolved;
+      return false;
     })
     .catch((error) => {
       console.error("Error:", error);
