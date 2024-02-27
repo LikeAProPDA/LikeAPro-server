@@ -47,6 +47,20 @@ export const getRecommendProblem = async (userId, count) => {
   }
 };
 
+export const randomRecommend = async (count) => {
+  try {
+    const recommendedProblems = await ProblemModel.aggregate([
+      { $sample: { size: count } },
+    ]);
+    return recommendedProblems;
+  } catch (error) {
+    if (error instanceof ApplicationError) {
+      throw error;
+    }
+    throw new ApplicationError(500, "Error getting recommended problems");
+  }
+};
+
 export const checkAndPostRecommend = async (userId, count) => {
   try {
     const today = new Date();
