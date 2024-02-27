@@ -14,6 +14,7 @@ const qaCommentSchema = new mongoose.Schema(
       ref: "qa",
       required: true,
     },
+    isAccepted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
