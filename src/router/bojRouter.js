@@ -3,6 +3,7 @@ import { ApplicationError } from "../util/error/applicationError.js";
 import {
   checkAndUpdateIsSolved,
   checkAndPostRecommend,
+  randomRecommend,
 } from "../service/bojService.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
 
@@ -26,12 +27,29 @@ router.post("/check", authHandler, async function (req, res, next) {
   }
 });
 
-//추천 문제 조회
+//추천 문제 조회 로그인
 router.get("/recommend", authHandler, async function (req, res, next) {
   try {
     const count = parseInt(req.query.num) || 2;
 
     const result = await checkAndPostRecommend(req.user.id, count);
+    return res.status(200).json({
+      success: true,
+      message: "Successfully fetched recommended problems",
+      result: result,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+//추천 문제 조회 비로그인
+router.get("/recommend/random", async function (req, res, next) {
+  try {
+    const count = parseInt(req.query.num) || 2;
+
+    const result = await randomRecommend(count);
     return res.status(200).json({
       success: true,
       message: "Successfully fetched recommended problems",
