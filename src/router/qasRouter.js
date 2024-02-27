@@ -2,7 +2,7 @@ import express from "express";
 import * as QAservice from "../service/qasService.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
-import qaCommentRouter from "./qaCommentRouter.js";
+import qaCommentRouter from "../router/qaCommentRouter.js";
 
 const router = express.Router();
 
@@ -87,5 +87,7 @@ router.put("/:qaid", authHandler, async function (req, res, next) {
     return next(error);
   }
 });
+
+// 댓글 채택 여부 업데이트: /api/qas/comments/:commentId/acceptance
 
 export default router;

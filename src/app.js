@@ -6,7 +6,9 @@ import userRouter from './router/userRouter.js';
 import dbSetUp from './db/dbSetUp.js';
 import cookieParser from 'cookie-parser';
 import qasRouter from './router/qasRouter.js';
+import scheduleRouter from './router/scheduleRouter.js';
 import bojRouter from './router/bojRouter.js';
+import scoreRouter from './router/scoreRouter.js';
 import playgroundRouter from './router/playgroundRouter.js';
 
 // 환경 변수 사용
@@ -29,7 +31,9 @@ app.use(
 // Router
 app.use('/api/users', userRouter);
 app.use('/api/qas', qasRouter);
+app.use('/api/schedule', scheduleRouter);
 app.use('/api/bojs', bojRouter);
+app.use('/api/score', scoreRouter);
 app.use('/api/playgrounds', playgroundRouter);
 
 // 에러 핸들링 미들웨어 -> 앱 전체적으로 검사하므로 맨 마지막에 배치해야함

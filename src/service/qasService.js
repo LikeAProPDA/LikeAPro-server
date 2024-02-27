@@ -87,3 +87,5 @@ export const editQA = async (qaId, newData) => {
     throw new ApplicationError(500, "Error updating QA");
   }
 };
+
+
