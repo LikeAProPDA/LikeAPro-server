@@ -21,6 +21,7 @@ export const checkAndUpdateIsSolved = async (problemNum, problemId, userId) => {
         );
       }
     }
+    console.log(isSolved);
     const result = { solved: user.solved, isSolved: isSolved };
     return result;
   } catch (error) {
