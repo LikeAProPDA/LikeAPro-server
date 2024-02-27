@@ -88,4 +88,20 @@ export const editQA = async (qaId, newData) => {
   }
 };
 
+const updateCommentForQA = async (commentId, isAccepted) => {
+  try {
+    const updatedComment = await QACommentModel.findByIdAndUpdate(
+      commentId,
+      { isAccepted },
+      { new: true }
+    );
 
+    if (!updatedComment) {
+      throw new ApplicationError(404, "해당 댓글을 찾을 수 없습니다.");
+    }
+
+    return updatedComment;
+  } catch (error) {
+    throw new ApplicationError(500, "댓글을 업데이트할 수 없습니다.", error);
+  }
+};
