@@ -23,7 +23,7 @@ app.use(cookieParser());
 // CORS 설정, 클라이언트 HOST와 맞추어야 함
 app.use(
     cors({
-        origin: ['http://localhost:5173'],
+        origin: ['http://localhost:5173', 'http://localhost:3000'],
         credentials: true,
     })
 );
