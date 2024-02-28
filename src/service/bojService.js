@@ -56,9 +56,19 @@ export const randomRecommend = async (count) => {
       { $sample: { size: count } },
     ]);
 
-    const result = recommendedProblems.map((problem) => ({ problem }));
+    const recommendation = recommendedProblems.map((problem) => ({
+      problem: {
+        _id: problem._id,
+        problemNum: problem.problemNum,
+        algoName: problem.algoName,
+        level: problem.level,
+        link: problem.link,
+        tags: problem.tags,
+        __v: problem.__v,
+      },
+    }));
 
-    return result;
+    return recommendation;
   } catch (error) {
     if (error instanceof ApplicationError) {
       throw error;
