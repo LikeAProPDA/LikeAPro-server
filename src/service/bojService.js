@@ -3,6 +3,7 @@ import UserModel from "../db/models/userModel.js";
 import ProblemModel from "../db/models/problemModel.js";
 import RecommendModel from "../db/models/recommendModel.js";
 import { ApplicationError } from "../util/error/applicationError.js";
+import { postScore } from "./scoreService.js";
 
 export const checkAndUpdateIsSolved = async (problemNum, problemId, userId) => {
   try {

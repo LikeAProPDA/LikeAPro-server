@@ -1,4 +1,5 @@
 import ScoreModel from "../db/models/scoreModel.js";
+import UserModel from "../db/models/userModel.js";
 import { ApplicationError } from "../util/error/applicationError.js";
 
 export const postScore = async (userId, score) => {
@@ -45,12 +46,6 @@ export const getRanking = async (start, limit) => {
         },
       },
       {
-        $skip: start,
-      },
-      {
-        $limit: limit,
-      },
-      {
         $lookup: {
           from: "users",
           localField: "_id",
@@ -63,34 +58,37 @@ export const getRanking = async (start, limit) => {
       },
     ]);
 
-    const totalCount = await ScoreModel.aggregate([
-      {
-        $match: {
-          $expr: {
-            $and: [
-              { $eq: [{ $year: "$createdAt" }, currentYear] },
-              { $eq: [{ $month: "$createdAt" }, currentMonth] },
-            ],
-          },
-        },
-      },
-      {
-        $group: {
-          _id: "$userId",
-          count: { $sum: 1 },
-        },
-      },
-    ]);
+    const allUsers = await UserModel.find({});
 
     const rankedData = sortData.map((entry, index) => ({
       userId: entry._id,
       totalScore: entry.totalScore,
       nickname: entry.userDetails.nickname,
-      ranking: index + 1 + start,
-      totalCount: totalCount.length,
+      ranking: index + 1,
+      totalCount: allUsers.length,
     }));
 
-    return rankedData;
+    rankedData.forEach((entry, index) => {
+      if (index > 0 && entry.totalScore === rankedData[index - 1].totalScore) {
+        entry.ranking = rankedData[index - 1].ranking;
+      }
+    });
+
+    const noScoreUsers = allUsers.filter(
+      (user) => !rankedData.some((entry) => entry.userId.equals(user._id))
+    );
+
+    const finalData = rankedData.concat(
+      noScoreUsers.map((user, index) => ({
+        userId: user._id,
+        totalScore: 0,
+        nickname: user.nickname,
+        ranking: rankedData.length + index + 1,
+        totalCount: allUsers.length,
+      }))
+    );
+
+    return finalData.slice(start, start + limit);
   } catch (error) {
     if (error instanceof ApplicationError) {
       throw error;
