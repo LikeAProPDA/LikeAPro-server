@@ -9,6 +9,7 @@ const mapToVisibleQA = (qa) => {
       id: qa.author.id,
       nickname: qa.author.nickname,
     },
+    createdAt: qa.createdAt,
   };
 };
 

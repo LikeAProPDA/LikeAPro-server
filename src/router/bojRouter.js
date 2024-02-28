@@ -6,6 +6,7 @@ import {
   randomRecommend,
 } from "../service/bojService.js";
 import authHandler from "../middleware/authHandler/authHandler.js";
+import { postScore } from "../service/scoreService.js";
 
 const router = express.Router();
 //백준 문제를 해결했는지 조회
@@ -16,6 +17,9 @@ router.post("/check", authHandler, async function (req, res, next) {
       req.body.problemId,
       req.user.id
     );
+
+    await postScore(req.user.id, );
+
     return res.status(200).json({
       success: true,
       message: "Successfully check beakjoon solving",

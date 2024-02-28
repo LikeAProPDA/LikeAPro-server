@@ -16,8 +16,8 @@ export const checkSolved = async (problemNum, backjoonId) => {
             const htmlSnippet = response.data;
             const dom = new JSDOM(htmlSnippet);
             const document = dom.window.document;
-
             const resultElements = document.querySelectorAll('.result-text');
+
 
             for (const resultElement of resultElements) {
                 if (resultElement.textContent.includes('맞았습니다!!')) {

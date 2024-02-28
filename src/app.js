@@ -36,6 +36,7 @@ app.use('/api/bojs', bojRouter);
 app.use('/api/score', scoreRouter);
 app.use('/api/playgrounds', playgroundRouter);
 
+
 // 에러 핸들링 미들웨어 -> 앱 전체적으로 검사하므로 맨 마지막에 배치해야함
 app.use(errorHandler);
 

@@ -88,6 +88,5 @@ router.put("/:qaid", authHandler, async function (req, res, next) {
   }
 });
 
-// 댓글 채택 여부 업데이트: /api/qas/comments/:commentId/acceptance
 
 export default router;
